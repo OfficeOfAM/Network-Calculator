@@ -1,0 +1,149 @@
+#Need to have a good logic regarding calulation the subnets.
+#So, number 8 is under development and need to check the codes line by line for proper output.
+
+from tkinter import *
+from tkinter import messagebox
+mygui1 = Tk()
+n = 'arial',15,'bold'
+#1. This function is written for quiting the application from the menu list.
+def mquit():
+    mquitbox = messagebox.askyesno(title='Quit', message='Do you want to quit?')
+    if mquitbox == 1:
+        mygui1.destroy()
+
+#2. This will open a new window after clicking tutorial option in Menu List.
+def tutorial():
+    mygui2 = Tk()
+    mygui2.title("Tutorial")
+    mygui2.geometry("400x400+400+180")
+
+
+#3. This will just display a message using messagebox.
+def about():
+    messagebox.showinfo(title='About', message='Will right it shortly after completing the software.')
+
+#4. This will popup a new window whenever the user chooses.
+def select():
+    a=v.get()
+    if (a == 1):
+        a1 = Tk()
+        var3=IntVar()
+        var4=IntVar()
+        var8 = IntVar()
+        j=IntVar()
+        a1.title('Specific Network')
+        var2=var1.get()     # Here we are getting the user ip address.
+        var3=len(var2)
+        i=var3-1
+#5. Below code is the code to extract the last octet digits.
+        while(i<=var3):
+            if(var2[i]== '.'):
+                break
+            i=i-1
+        j=i+1
+        if(var3-j == 3):
+            var4=100*int(var2[j])+10*int(var2[j+1])+int(var2[j+2])
+        elif(var3-j == 2):
+            var4 =10*int(var2[j])+int(var2[j+1])
+        elif (var3 - j == 1):
+            var4 = var2[j]
+#6. Below code is to check whether the last octet is 255 or 0.
+        if(int(var4) >= 255):
+            l1 = Label(a1, text=var2, fg='Red',font=(n), padx=30, pady=20).pack()
+            l1 = Label(a1, text='Above IP Address is invalid.',fg='Red',font=(n), padx=30, pady=20).pack()
+        elif(int(var4) <= 0):
+            l1 = Label(a1, text=var2, fg='Red', font=(n), padx=30, pady=20).pack()
+            l1 = Label(a1, text='Above IP address is invalid.', fg='Red', font=(n), padx=30, pady=20).pack()
+#7. Below code will show the network id of the entered ip address.
+        else:
+            #l1 = Label(a1, text='$Under Constructio1$', fg='Black', font=(n), padx=30, pady=20).pack()
+            var6 = var5.get()
+            var7 = len(var6)
+            i = int(var7) - 1
+            while (i <= var7):
+                if (var6[i] == '.'):               # This code will first decide the last octet of the subnet and then calculate the rest.
+                    break                          # This code is still networking need to check line by line.
+                i = i - 1
+            j = i + 1
+            if (var7 - j == 3):
+                var8 = 100 * int(var6[j]) + 10 * int(var6[j + 1]) + int(var6[j + 2])
+            elif (var7 - j == 2):
+                var8 = 10 * int(var6[j]) + int(var6[j + 1])
+            elif (var7 - j == 1):
+                var8 = var6[j]
+            print(var8)
+        list1 = [0, 128, 192, 224, 240, 248, 252]
+        k=1
+#8. This will determine the wrong subnetmask
+        for i in list1:
+            k = k + 1
+            if(var8 == list1):
+                break
+            elif(k == 7):
+                l1 = Label(a1, text=var6, fg='Red', font=(n), padx=30, pady=20).pack()
+                l1 = Label(a1, text='Above Subnet Mask is invalid.', fg='Red', font=(n), padx=30, pady=20).pack()
+                break
+            else:
+                continue
+
+
+#9. THis will show all the subnets at once and show it as a table. This code is under development.
+    elif(a == 2):
+        a1 = Tk()
+        a1.title('All Subnets')
+        l1 = Label(a1, text='$Under Construction2$', fg='Black', font=(n), padx=30,pady=20).pack()
+
+#10. This will just clear the textbox for re-entry.
+def mclear():
+    input1.delete(0,END)
+    input2.delete(0,END)
+
+
+#11. The Main Window.
+mygui1.title("Calculate Subnets",)
+mygui1.geometry("460x250+200+100")
+#12. All the list and menus which are created. Need a lot of development.
+mymenu=Menu()
+listfile=Menu()
+
+listfile.add_command(label='Save As')
+listfile.add_command(label='Export to PDF')
+listfile.add_command(label='Quit',command=mquit)
+
+#listedit=Menu()
+#listview=Menu()        This two will be added later.
+
+listhelp=Menu()
+
+listhelp.add_command(label='Tutorial',command=tutorial)
+listhelp.add_command(label='About',command=about)
+
+mymenu.add_cascade(label='File',menu=listfile)
+mymenu.add_cascade(label='Edit')
+mymenu.add_cascade(label='View')
+mymenu.add_cascade(label='Help',menu=listhelp)
+mygui1.config(menu=mymenu)
+
+#13. This below codes are responsible for all the labels and text
+
+var1 = StringVar()   # This is the variable for the user entering values in the textbox.
+var5 = StringVar()
+label1 = Label(text = 'Class C Type Network Address',padx=10,pady=10,fg='Black',font=(n)).grid(row=0,sticky=W)
+input1 = Entry(mygui1,width=15,textvariable=var1)
+input1.grid(row=0,column=1)
+input1.insert(0,'Ex: 192.168.1.0')
+label2 = Label(text = 'Class C Type Subnet Mask',padx=10,pady=10,fg='Black',font=(n)).grid(row=1,sticky=W)
+input2 = Entry(mygui1,width=15,textvariable=var5)
+input2.grid(row=1,column=1)
+input2.insert(0,'Ex: 255.255.255.0')
+
+#14. THis below codes are responsible for 1 lable, Radiobuttons and Buttons.
+v = IntVar()
+choose = Label(text ='Choose',fg='Black',padx=10,font=(n)).grid(row=2,sticky=W)
+Radiobutton(mygui1,text='Show the Network it belongs!',padx=10,variable=v,value=1).grid(row=3,sticky=W)
+Radiobutton(mygui1,text='Show subnets for a given Network ID!',padx=10,variable=v,value=2).grid(row=4,sticky=W)
+Button(mygui1, text='Calculate',command=select,width=10,font=(n)).grid(row=4, column=1)
+Button(mygui1,text='Clear',command=mclear,width=10,font=(n)).grid(row=6,column=0)
+Button(mygui1,text='Exit',command=mygui1.destroy,width=10,font=(n)).grid(row=6,column=1)
+
+mygui1.mainloop()
